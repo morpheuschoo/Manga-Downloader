@@ -15,6 +15,12 @@ application_path = os.path.dirname(sys.executable)
 
 def main():
 
+    # information
+    print(
+        'This programme steals manga from https://mangadex.tv/.\n'
+        'Search for manga here and download it to your computer.\n'
+    )
+
     # takes in user search
     search = input('Search on MangaDex: ')
 
