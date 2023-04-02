@@ -2,7 +2,7 @@
 # Downloads manga from https://mangadex.tv/
 # Search for manga that you want to download from the website
 # programme downloads every single chapter or selected chapters in the manga
-
+# speed 1.1s per 100pages
 import os
 import sys
 import re
@@ -19,6 +19,7 @@ def main():
     print(
         'This programme steals manga from https://mangadex.tv/.\n'
         'Search for manga here and download it to your computer.\n'
+        'Speed of downloader is ~1.1s per 100 pages\n'
     )
 
     # takes in user search
@@ -48,15 +49,20 @@ def main():
     print()
     mangaSelection = input('Selection: ')
 
-    try:
-        mangaSelection = int(mangaSelection)
-    except:
-        print('Invalid selection!')
-        return 1
+    while True:
+        try:
+            # ensure that integer is inputted
+            mangaSelection = int(mangaSelection)
 
-    if mangaSelection < 1 or mangaSelection > 5:
-        print('Invalid selection!')
-        return 1
+            # ensure selection is within range
+            if mangaSelection < 1 or mangaSelection > len(titleLink):
+                print('Invalid input!')
+                mangaSelection = input('Please retype selection: ')
+            else:
+                break
+        except:
+            print('Invalid input!')
+            mangaSelection = input('Please retype selection: ')
 
     # access main page of manga
     request = requests.get(f'https://mangadex.tv{titleLink[int(mangaSelection) - 1][1]}')
@@ -202,9 +208,9 @@ def main():
             # save each chapter as a pdf file
             images[0].save(f'{application_path}/{mangaTitle}/{chapterTitle}.pdf', 'PDF', save_all=True, resolution=100, append_images=images[1:])
 
-            print('Done downloading!')
+    print('Done downloading!')
 
-            return 0
+    return 0
 
 if __name__ == "__main__":
     main()
