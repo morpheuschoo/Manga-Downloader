@@ -2,7 +2,7 @@
 # Downloads manga from https://mangadex.tv/
 # Search for manga that you want to download from the website
 # programme downloads every single chapter or selected chapters in the manga
-# speed 1.1s per 100pages
+# speed 110s per 100pages
 import os
 import sys
 import re
@@ -14,32 +14,26 @@ from io import BytesIO
 application_path = os.path.dirname(sys.executable)
 
 def main():
+    while True:
 
-    # information
-    print(
-        'This programme steals manga from https://mangadex.tv/.\n'
-        'Search for manga here and download it to your computer.\n'
-        'Speed of downloader is ~1.1s per 100 pages\n'
-    )
+        # takes in user search
+        search = input('Search on MangaDex: ')
 
-    # takes in user search
-    search = input('Search on MangaDex: ')
+        search = re.sub(' ', '+', search)
 
-    search = re.sub(' ', '+', search)
+        searchWebpage = requests.get(f'https://mangadex.tv/search?type=titles&title={search}&submit=')
 
-    searchWebpage = requests.get(f'https://mangadex.tv/search?type=titles&title={search}&submit=')
+        if searchWebpage.status_code != 200:
+            print('Webpage not found!')
+        else:
+            searchWebpageContent = BeautifulSoup(searchWebpage.content, 'html.parser')
 
-    if searchWebpage.status_code != 200:
-        print('Invalid search!')
-        return 1
+            titleLink = [[row['title'], row['href']] for row in searchWebpageContent.findAll(class_='ml-1 manga_title text-truncate', limit=5)]
 
-    searchWebpageContent = BeautifulSoup(searchWebpage.content, 'html.parser')
-
-    titleLink = [[row['title'], row['href']] for row in searchWebpageContent.findAll(class_='ml-1 manga_title text-truncate', limit=5)]
-
-    if len(titleLink) == 0:
-        print('No manga found.')
-        return 1
+            if len(titleLink) == 0:
+                print('No manga found.')
+            else:
+                break
 
     print()
     print('Select an option:')
@@ -168,13 +162,17 @@ def main():
             else:
                 chapterSelectionPROCESSED.add(value - 1)
 
+    print()
+
     # ensures that special symbols removed
     mangaTitle = re.sub('<|>|:|"|/|\\|\?|\*', ' ', mangaTitle)
 
     # make a folder with the manga title as its name
-    os.makedirs(f'{application_path}/{mangaTitle}')
-
-    print()
+    # if folder present inform user that files will be stored there
+    if os.path.isdir(f'{application_path}/{mangaTitle}'):
+        print(f'Folder name - {mangaTitle} is present, storing files there.')
+    else:
+        os.makedirs(f'{application_path}/{mangaTitle}')
 
     # iterrates though selection and downloads each chapter
     for x in chapterSelectionPROCESSED:
@@ -185,7 +183,7 @@ def main():
         if chapter.status_code != 200:
             print(f'Could not locate {chapterTitles[x]}.')
         else:
-            print(f'Currently processing {chapterTitles[x]}...')
+            print(f'Currently downloading {chapterTitles[x]}...')
             
             chapterContent = BeautifulSoup(chapter.content, 'html.parser')
 
@@ -194,23 +192,36 @@ def main():
             # obtain each image link in each chapter
             for row in chapterContent.findAll(class_='noselect nodrag cursor-pointer img-loading'):
                 pageLinks.append(row['data-src'])
-            
-            images = []
 
-            # download images from image links
-            for page in pageLinks:
-                response = requests.get(page)
+            try:
+                images = []
 
-                images.append(Image.open(BytesIO(response.content)))
-            
-            chapterTitle = re.sub('<|>|:|"|/|\\|\?|\*', ' ', chapterTitles[x])
+                # download images from image links
+                for page in pageLinks:
+                    response = requests.get(page)
 
-            # save each chapter as a pdf file
-            images[0].save(f'{application_path}/{mangaTitle}/{chapterTitle}.pdf', 'PDF', save_all=True, resolution=100, append_images=images[1:])
+                    images.append(Image.open(BytesIO(response.content)))
+                
+                chapterTitle = re.sub('<|>|:|"|/|\\|\?|\*', ' ', chapterTitles[x])
+
+                # save each chapter as a pdf file
+                images[0].save(f'{application_path}/{mangaTitle}/{chapterTitle}.pdf', 'PDF', save_all=True, resolution=100, append_images=images[1:])
+            except:
+                print(f'Images for {chapterTitles[x]} could not be found.\nWebsite could have uploaded corrupted files.')
 
     print('Done downloading!')
 
     return 0
 
 if __name__ == "__main__":
-    main()
+
+    # information
+    print(
+        'This programme steals manga from https://mangadex.tv/.\n'
+        'Search for manga here and download it to your computer.\n'
+        'Speed of downloader is ~110s per 100 pages\n'
+    )
+
+    while True:
+        main()
+        print()
