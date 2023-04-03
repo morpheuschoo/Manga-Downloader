@@ -205,7 +205,7 @@ def main():
                 chapterTitle = re.sub('<|>|:|"|/|\\\|\?|\*', ' ', chapterTitles[x])
 
                 # save each chapter as a pdf file
-                images[0].save(f'{application_path}/{mangaTitle}/{chapterTitle}.pdf', 'PDF', save_all=True, resolution=100, append_images=images[1:])
+                images[0].save(f'{application_path}/{mangaTitle}/({x + 1}) {chapterTitle}.pdf', 'PDF', save_all=True, resolution=100, append_images=images[1:])
             except:
                 print(f'Images for {chapterTitles[x]} could not be found.\nWebsite could have uploaded corrupted files.')
 
