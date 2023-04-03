@@ -165,12 +165,12 @@ def main():
     print()
 
     # ensures that special symbols removed
-    mangaTitle = re.sub('<|>|:|"|/|\\|\?|\*', ' ', mangaTitle)
+    mangaTitle = re.sub('<|>|:|"|/|\\\|\?|\*', ' ', mangaTitle)
 
     # make a folder with the manga title as its name
     # if folder present inform user that files will be stored there
     if os.path.isdir(f'{application_path}/{mangaTitle}'):
-        print(f'Folder name - {mangaTitle} is present, storing files there.')
+        print(f'Folder name - {mangaTitle} - is present, storing files there.')
     else:
         os.makedirs(f'{application_path}/{mangaTitle}')
 
@@ -202,7 +202,7 @@ def main():
 
                     images.append(Image.open(BytesIO(response.content)))
                 
-                chapterTitle = re.sub('<|>|:|"|/|\\|\?|\*', ' ', chapterTitles[x])
+                chapterTitle = re.sub('<|>|:|"|/|\\\|\?|\*', ' ', chapterTitles[x])
 
                 # save each chapter as a pdf file
                 images[0].save(f'{application_path}/{mangaTitle}/{chapterTitle}.pdf', 'PDF', save_all=True, resolution=100, append_images=images[1:])
