@@ -174,11 +174,15 @@ def main():
     else:
         os.makedirs(f'{application_path}/{mangaTitle}')
 
+    chaptersDownloaded = 0
+
     # iterrates though selection and downloads each chapter
     for x in chapterSelectionPROCESSED:
 
         # access individual chapters of the manga
         chapter = requests.get(f'https://mangadex.tv{chapterLinks[x]}')
+
+        print('<' + str(int(round(chaptersDownloaded / len(chapterSelectionPROCESSED) * 100))) + '%> ', end='')
 
         if chapter.status_code != 200:
             print(f'Could not locate {chapterTitles[x]}.')
@@ -208,8 +212,10 @@ def main():
                 images[0].save(f'{application_path}/{mangaTitle}/({x + 1}) {chapterTitle}.pdf', 'PDF', save_all=True, resolution=100, append_images=images[1:])
             except:
                 print(f'Images for {chapterTitles[x]} could not be found.\nWebsite could have uploaded corrupted files.')
+            
+            chaptersDownloaded += 1
 
-    print('Done downloading!')
+    print('<100%> Done downloading!')
 
     return 0
 
