@@ -200,9 +200,9 @@ def readmORG():
         percentage = str(int(round(chaptersDownloaded / len(chapterSelectionProcessed) * 100)))
 
         if chapter.status_code != 200:
-            print(f'\x1b[1;41;1m <{percentage}%> Could not locate {chapterTitles[x]}. \x1b[0m')
+            print(f'\x1b[41;1m <{percentage}%> Could not locate {chapterTitles[x]}. \x1b[0m')
         else:
-            print(f'\x1b[1;42;1m <{percentage}%> Currently downloading {chapterTitles[x]}... \x1b[0m')
+            print(f'\x1b[42;1m <{percentage}%> Currently downloading {chapterTitles[x]}... \x1b[0m')
             
             chapterContent = BeautifulSoup(chapter.content, 'html.parser')
 
@@ -238,11 +238,11 @@ def readmORG():
                 print('\x1b[?25h\x1b[0J', end="")
             except:
                 print('\x1b[1F\x1b[0J', end="")
-                print(f'\x1b[1;41;1m Images for {chapterTitles[x]} could not be found. \x1b[0m')
-                print('\x1b[1;41;1m Website could have uploaded corrupted files. \x1b[0m')
+                print(f'\x1b[41;1m Images for {chapterTitles[x]} could not be found. \x1b[0m')
+                print('\x1b[41;1m Website could have uploaded corrupted files. \x1b[0m')
             
         chaptersDownloaded += 1
 
-    print('\x1b[1;43;1m <100%> Done downloading! \x1b[0m')
+    print('\x1b[43;1m <100%> Done downloading! \x1b[0m')
 
     return 0
