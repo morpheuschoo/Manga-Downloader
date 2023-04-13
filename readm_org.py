@@ -31,7 +31,7 @@ def readmORG():
         options.add_argument("--headless")
         searchWebpage = webdriver.Chrome(options=options)
 
-        print("\x1b[3F\x1b[0J", end="")
+        print("\x1b[4F\x1b[0J", end="")
 
         # opens manga website
         searchWebpage.get("https://readm.org/")
