@@ -235,7 +235,7 @@ def readmORG():
                 images[0].save(f'{application_path}/{mangaTitle}/({x + 1}) {chapterTitle}.pdf', 'PDF', save_all=True, resolution=100, append_images=images[1:])
 
                 print('\x1b[?25h\x1b[1F\x1b[0J', end="")
-                print(f'\x1b[42;1m <{percentage}%> Downloaded {chapterTitles[x]}. \x1b[0m')
+                print(f'\x1b[42;1m <{percentage:.2f}%> Downloaded {chapterTitles[x]}. \x1b[0m')
             except:
                 print('\x1b[1F\x1b[0J', end="")
                 print(f'\x1b[41;1m Images for {chapterTitles[x]} could not be found. \x1b[0m')
