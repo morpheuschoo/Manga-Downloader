@@ -176,12 +176,12 @@ def mangadexTV():
         # access individual chapters of the manga
         chapter = requests.get(f'https://mangadex.tv{chapterLinks[x]}')
 
-        percentage = str(int(round(chaptersDownloaded / len(chapterSelectionProcessed) * 100)))
+        percentage = chaptersDownloaded / len(chapterSelectionProcessed) * 100
 
         if chapter.status_code != 200:
-            print(f'\x1b[41;1m <{percentage}%> Could not locate {chapterTitles[x]}. \x1b[0m')
+            print(f'\x1b[41;1m <{percentage:.2f}%> Could not locate {chapterTitles[x]}. \x1b[0m')
         else:
-            print(f'\x1b[42;1m <{percentage}%> Currently downloading {chapterTitles[x]}... \x1b[0m')
+            print(f'\x1b[42;1m <{percentage:.2f}%> Currently downloading {chapterTitles[x]}... \x1b[0m')
             
             chapterContent = BeautifulSoup(chapter.content, 'html.parser')
 
